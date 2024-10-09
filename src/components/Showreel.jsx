@@ -1,34 +1,91 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import {
+  AiOutlineWifi,
+  AiFillPlayCircle,
+  AiFillPauseCircle,
+} from "react-icons/ai";
+import { BiBattery } from "react-icons/bi";
 
-const ShowreelCard = ({ number, text }) => (
-  <div className="group cursor-pointer group-hover:duration-500 overflow-hidden relative rounded-2xl shadow-inner shadow-gray-50 flex flex-col justify-around items-center w-64 h-96 bg-neutral-900 text-gray-50">
-    <div className="after:duration-500 before:duration-500 duration-500 group-hover:before:translate-x-16 group-hover:before:-translate-y-16 group-hover:after:translate-x-16 group-hover:after:translate-y-20 after:absolute after:w-16 after:h-16 after:bg-orange-400 after:rounded-full after:-z-10 after:blur-xl after:bottom-40 after:right-20 before:absolute before:w-24 before:h-24 before:bg-sky-400 before:rounded-full before:-z-10 before:blur-xl before:top-24 before:right-20 flex flex-col font-extrabold text-7xl z-10">
-      <span>{number}</span>
+const ShowreelCard = ({ number, text }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update every minute
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="relative w-72 h-[600px] rounded-[40px] overflow-hidden shadow-xl bg-black mb-4">
+        {/* Phone frame */}
+        <div className="absolute inset-0 border-[14px] border-gray-500 rounded-[40px] z-10 pointer-events-none">
+          {/* Notch */}
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-6 bg-black rounded-b-2xl"></div>
+        </div>
+
+        {/* Status bar */}
+        <div className="absolute top-5 left-6 right-6 flex justify-between items-center z-20 text-white">
+          <span className="text-xs">{formatTime(currentTime)}</span>
+          <div className="flex items-center space-x-1">
+            <AiOutlineWifi />
+            <BiBattery />
+          </div>
+        </div>
+
+        {/* Video content */}
+        <div className="w-full h-full overflow-hidden relative">
+          <video
+            ref={videoRef}
+            className="w-full h-full object-cover"
+            loop
+            muted
+            playsInline
+          >
+            <source
+              src="https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
+            <div className="font-bold text-2xl mb-2 text-white">{text}</div>
+            <div className="text-sm text-gray-300">Tap to play/pause</div>
+          </div>
+          <button
+            onClick={togglePlay}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-6xl opacity-50 hover:opacity-100 transition-opacity"
+          >
+            {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
+          </button>
+        </div>
+
+        {/* Home indicator */}
+        <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-white rounded-full z-20"></div>
+      </div>
     </div>
-    <div className="flex flex-row justify-center text-lg font-thin items-center gap-2 font-thin">
-      <span>{text}</span>
-      <svg
-        className="w-6 h-6 stroke-current"
-        height="100"
-        preserveAspectRatio="xMidYMid meet"
-        viewBox="0 0 100 100"
-        width="100"
-        x="0"
-        xmlns="http://www.w3.org/2000/svg"
-        y="0"
-      >
-        <path
-          d="M33.9,46V29.9a16.1,16.1,0,0,1,32.2,0M50,62v8.1m-24.1,16H74.1a8,8,0,0,0,8-8V54a8,8,0,0,0-8-8H25.9a8,8,0,0,0-8,8V78.1A8,8,0,0,0,25.9,86.1Z"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="8"
-        ></path>
-      </svg>
-    </div>
-  </div>
-);
+  );
+};
 
 const Showreel = () => {
   const showreelItems = [
@@ -47,9 +104,9 @@ const Showreel = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Showreel
+          Show reel
         </motion.h2>
-        <div className="flex flex-wrap justify-center gap-16">
+        <div className="flex flex-wrap justify-center gap-16 mb-12">
           {showreelItems.map((item, index) => (
             <motion.div
               key={item.number}
@@ -61,27 +118,18 @@ const Showreel = () => {
             </motion.div>
           ))}
         </div>
-        <motion.div
-          className="mt-24 text-center max-w-3xl mx-auto"
+        <motion.p
+          className="text-center text-lg text-gray-300 max-w-3xl mx-auto"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
         >
-          <h3 className="text-3xl font-semibold mb-6 text-white">
-            My Work in Action
-          </h3>
-          <p className="text-xl mb-6 text-gray-300">
-            These cards represent key aspects of my work as an executive
-            assistant. Each showcases a crucial skill that I bring to the table,
-            ensuring efficient and effective support for executives and
-            organizations.
-          </p>
-          <p className="text-xl text-gray-300">
-            From maintaining impeccable organization to facilitating clear
-            communication, my goal is to streamline operations and support
-            executive functions at the highest level.
-          </p>
-        </motion.div>
+          Experience the power of our comprehensive suite of tools designed to
+          enhance your productivity. From streamlined organization to efficient
+          communication and innovative problem-solving, our platform empowers
+          you to tackle any challenge with confidence and achieve your goals
+          faster than ever before.
+        </motion.p>
       </div>
     </section>
   );

@@ -3,17 +3,17 @@ import { motion } from "framer-motion";
 
 const TestimonialCard = ({ name, role, text }) => (
   <motion.div
-    className="bg-gray-700 p-6 rounded-lg shadow-lg"
+    className="bg-gray-700 p-8 rounded-lg shadow-lg h-full flex flex-col justify-between"
     initial={{ opacity: 0, y: 50 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
   >
-    <p className="text-gray-300 mb-4 italic">"{text}"</p>
-    <div className="flex items-center">
-      <div className="w-12 h-12 bg-gray-500 rounded-full mr-4"></div>
+    <p className="text-gray-300 mb-6 italic text-lg">{text}</p>
+    <div className="flex items-center mt-auto">
+      <div className="w-16 h-16 bg-gray-500 rounded-full mr-4"></div>
       <div>
-        <h4 className="text-white font-semibold">{name}</h4>
-        <p className="text-gray-400 text-sm">{role}</p>
+        <h4 className="text-white font-semibold text-xl">{name}</h4>
+        <p className="text-gray-400 text-base">{role}</p>
       </div>
     </div>
   </motion.div>
@@ -39,17 +39,20 @@ const Testimonials = () => {
   ];
 
   return (
-    <section id="testimonials" className="py-24 bg-gray-800 text-gray-100">
+    <section
+      id="testimonials"
+      className="py-32 bg-gray-800 text-gray-100 min-h-screen flex items-center"
+    >
       <div className="container mx-auto px-4">
         <motion.h2
-          className="text-5xl font-bold mb-16 text-center text-white"
+          className="text-6xl font-bold mb-24 text-center text-white"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
           Testimonials
         </motion.h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
               key={index}

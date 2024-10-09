@@ -60,10 +60,10 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { name: "About", icon: AiOutlineUser },
-    { name: "Showreel", icon: AiOutlineVideoCamera },
-    { name: "Testimonials", icon: AiOutlineStar },
-    { name: "Contact Me", icon: AiOutlineMail },
+    { name: "About", icon: AiOutlineUser, id: "about" },
+    { name: "Showreel", icon: AiOutlineVideoCamera, id: "showreel" },
+    { name: "Testimonials", icon: AiOutlineStar, id: "testimonials" },
+    { name: "Contact Me", icon: AiOutlineMail, id: "contact-me" },
   ];
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -159,18 +159,22 @@ const Navbar = () => {
                         transition={{ duration: 0.3 }}
                       >
                         <a
-                          href={`#${item.name.toLowerCase().replace(" ", "-")}`}
-                          className={`text-white hover:text-gray-300 transition-colors duration-300 ${
+                          href={`#${item.id}`}
+                          className={`text-white transition-colors duration-300 ${
                             windowWidth < 1024 ? "text-4xl" : "text-base"
-                          }`}
+                          } hover:text-gray-300 font-semibold`}
                           onClick={(e) => {
                             e.preventDefault();
-                            scrollToSection(
-                              `#${item.name.toLowerCase().replace(" ", "-")}`
-                            );
+                            scrollToSection(`#${item.id}`);
                           }}
                         >
-                          {item.name}
+                          <span
+                            className={
+                              activeSection === item.id ? "text-yellow-400" : ""
+                            }
+                          >
+                            {item.name}
+                          </span>
                         </a>
                       </motion.li>
                     ))}
