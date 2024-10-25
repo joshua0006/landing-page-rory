@@ -11,7 +11,7 @@ import {
 } from "react-icons/ai";
 
 const Navbar = () => {
-  const [activeSection, setActiveSection] = useState("header");
+  const [activeSection, setActiveSection] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,8 +23,8 @@ const Navbar = () => {
 
     const observerOptions = {
       root: null,
-      rootMargin: "0px",
-      threshold: 0.5,
+      rootMargin: "-20% 0px -80% 0px",
+      threshold: 0,
     };
 
     const observerCallback = (entries) => {
@@ -40,14 +40,20 @@ const Navbar = () => {
       observerOptions
     );
 
-    const sections = document.querySelectorAll(
-      "header, #about, #showreel, #testimonials, #contact-me"
-    );
+    const sections = document.querySelectorAll("section[id]");
     sections.forEach((section) => observer.observe(section));
 
     const handleScroll = () => {
       setShowScrollTop(window.pageYOffset > 300);
       setIsScrolled(window.pageYOffset > 50);
+
+      // Check if the user is at the bottom of the page
+      if (
+        window.innerHeight + window.pageYOffset >=
+        document.body.offsetHeight - 2
+      ) {
+        setActiveSection("contact-me");
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -77,20 +83,18 @@ const Navbar = () => {
 
   const scrollToSection = (sectionId) => {
     setIsOpen(false);
-    setTimeout(() => {
-      const section = document.querySelector(sectionId);
-      if (section) {
-        const navbarHeight = 80;
-        const sectionPosition = section.getBoundingClientRect().top;
-        const offsetPosition =
-          sectionPosition + window.pageYOffset - navbarHeight;
+    const section = document.getElementById(sectionId);
+    if (section) {
+      const navbarHeight = 80;
+      const sectionPosition = section.getBoundingClientRect().top;
+      const offsetPosition =
+        sectionPosition + window.pageYOffset - navbarHeight;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
-      }
-    }, 300);
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
@@ -165,7 +169,7 @@ const Navbar = () => {
                           } hover:text-gray-300 font-semibold`}
                           onClick={(e) => {
                             e.preventDefault();
-                            scrollToSection(`#${item.id}`);
+                            scrollToSection(item.id);
                           }}
                         >
                           <span

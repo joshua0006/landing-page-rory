@@ -39,10 +39,7 @@ const Testimonials = () => {
   ];
 
   return (
-    <section
-      id="testimonials"
-      className="py-32 bg-gray-800 text-gray-100 min-h-screen flex items-center"
-    >
+    <section id="testimonials" className="bg-primary text-secondary py-36">
       <div className="container mx-auto px-4">
         <motion.h2
           className="text-6xl font-bold mb-24 text-center text-white"

@@ -5,7 +5,7 @@ import {
   AiFillPlayCircle,
   AiFillPauseCircle,
 } from "react-icons/ai";
-import { BiBattery } from "react-icons/bi";
+import { BiBattery, BiSolidBatteryFull } from "react-icons/bi";
 
 const ShowreelCard = ({ number, text }) => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -37,19 +37,25 @@ const ShowreelCard = ({ number, text }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-72 h-[600px] rounded-[40px] overflow-hidden shadow-xl bg-black mb-4">
+      <div
+        className="relative w-72 h-[600px] rounded-[40px] overflow-hidden shadow-xl bg-black mb-4"
+        role="region"
+        aria-label={`Showreel card ${number}`}
+      >
         {/* Phone frame */}
-        <div className="absolute inset-0 border-[14px] border-gray-500 rounded-[40px] z-10 pointer-events-none">
+        <div className="absolute inset-0 border-[5px] border-gray-700 rounded-[40px] z-10 pointer-events-none">
           {/* Notch */}
-          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-6 bg-black rounded-b-2xl"></div>
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-6 bg-gray-800 rounded-b-2xl"></div>
         </div>
 
         {/* Status bar */}
         <div className="absolute top-5 left-6 right-6 flex justify-between items-center z-20 text-white">
-          <span className="text-xs">{formatTime(currentTime)}</span>
+          <span className="text-xs" aria-live="polite">
+            {formatTime(currentTime)}
+          </span>
           <div className="flex items-center space-x-1">
-            <AiOutlineWifi />
-            <BiBattery />
+            <AiOutlineWifi aria-label="WiFi signal" />
+            <BiSolidBatteryFull aria-label="Battery full" />
           </div>
         </div>
 
@@ -61,6 +67,7 @@ const ShowreelCard = ({ number, text }) => {
             loop
             muted
             playsInline
+            aria-label={`Video content for ${text}`}
           >
             <source
               src="https://assets.mixkit.co/videos/preview/mixkit-set-of-plateaus-seen-from-the-heights-in-a-sunset-26070-large.mp4"
@@ -68,13 +75,14 @@ const ShowreelCard = ({ number, text }) => {
             />
             Your browser does not support the video tag.
           </video>
-          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
+          <div className="absolute bottom-0 left-0 right-0 p-10 bg-gradient-to-t from-black to-transparent">
             <div className="font-bold text-2xl mb-2 text-white">{text}</div>
             <div className="text-sm text-gray-300">Tap to play/pause</div>
           </div>
           <button
             onClick={togglePlay}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-6xl opacity-50 hover:opacity-100 transition-opacity"
+            aria-label={isPlaying ? "Pause video" : "Play video"}
           >
             {isPlaying ? <AiFillPauseCircle /> : <AiFillPlayCircle />}
           </button>
@@ -96,7 +104,7 @@ const Showreel = () => {
   ];
 
   return (
-    <section id="showreel" className="py-24 bg-gray-800 text-gray-100">
+    <section id="showreel" className="bg-secondary text-primary py-32">
       <div className="container mx-auto px-4">
         <motion.h2
           className="text-5xl font-bold mb-16 text-center text-white"

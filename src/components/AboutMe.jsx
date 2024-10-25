@@ -29,7 +29,7 @@ const AboutMe = () => {
   ];
 
   return (
-    <section id="about" className="py-16 bg-gray-800 text-gray-100">
+    <section id="about" className="py-32 bg-gray-800 text-gray-100">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl font-bold mb-12 text-center text-white">
           About Me
@@ -56,7 +56,7 @@ const AboutMe = () => {
           </div>
         </div>
         <div className="mt-12 grid md:grid-cols-3 gap-8">
-          {skills.map((skill, index) => (
+          {skills.map((skill) => (
             <div
               key={skill.title}
               className="bg-gray-700 p-6 rounded-lg shadow-md text-center"
